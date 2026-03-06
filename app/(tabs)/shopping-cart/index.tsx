@@ -1,5 +1,5 @@
-import OrderResume from "@/presentation/menu/shopping-cart/components/OrderResume";
-import ThemedShoppingCartCard from "@/presentation/menu/shopping-cart/components/ThemedShoppingCartCard";
+import OrderResume from "@/presentation/shopping-cart/components/OrderResume";
+import ThemedShoppingCartCard from "@/presentation/shopping-cart/components/ThemedShoppingCartCard";
 import ThemedButton from "@/presentation/theme/ThemedButton";
 import React from "react";
 import { FlatList, View } from "react-native";

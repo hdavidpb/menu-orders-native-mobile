@@ -1,7 +1,8 @@
 import { useThemeColor } from "@/hooks/use-theme-color";
 import MenuHeaderLeft from "@/presentation/menu/components/MenuHeaderLeft";
+import CustomBack from "@/presentation/theme/CustomBack";
 import { Ionicons } from "@expo/vector-icons";
-import { Tabs } from "expo-router";
+import { router, Tabs } from "expo-router";
 import React from "react";
 
 const TabsLayout = () => {
@@ -48,13 +49,24 @@ const TabsLayout = () => {
       <Tabs.Screen
         name="orders/index"
         options={{
-          title: "",
+          title: "Mis pedidos",
           tabBarLabel: "pedidos",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="map-outline" color={color} size={size - 7} />
           ),
           tabBarActiveTintColor: tabIconSelected,
           tabBarInactiveTintColor: tabIconDefault,
+        }}
+      />
+      <Tabs.Screen
+        name="orders/[id]"
+        options={{
+          title: "",
+          href: null,
+
+          headerLeft: () => (
+            <CustomBack handleBack={() => router.push("/(tabs)/orders")} />
+          ),
         }}
       />
       <Tabs.Screen

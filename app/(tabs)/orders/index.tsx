@@ -1,12 +1,14 @@
-import { ThemedText } from "@/components/themed-text";
+import OrderCart from "@/presentation/orders/components/OrderCart";
 import React from "react";
-import { View } from "react-native";
+import { FlatList } from "react-native";
 
 const OrdersScreen = () => {
   return (
-    <View>
-      <ThemedText>OrdersScreen</ThemedText>
-    </View>
+    <FlatList
+      data={[1, 2, 3]}
+      keyExtractor={(item) => item.toString()}
+      renderItem={() => <OrderCart />}
+    />
   );
 };
 

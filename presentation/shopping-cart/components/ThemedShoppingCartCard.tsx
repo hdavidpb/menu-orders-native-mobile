@@ -25,7 +25,7 @@ const ThemedShoppingCartCard = () => {
     <View style={[styles.container, globalStyles.shadow, { backgroundColor }]}>
       <Image
         style={styles.image}
-        source={require("../../../../assets/images/burger.jpeg")}
+        source={require("../../../assets/images/burger.jpeg")}
         width={96}
         height={96}
         resizeMode="cover"
