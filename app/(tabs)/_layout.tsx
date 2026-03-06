@@ -1,0 +1,66 @@
+import { useThemeColor } from "@/hooks/use-theme-color";
+import MenuHeaderLeft from "@/presentation/menu/components/MenuHeaderLeft";
+import { Ionicons } from "@expo/vector-icons";
+import { Tabs } from "expo-router";
+import React from "react";
+
+const TabsLayout = () => {
+  const tabIconSelected = useThemeColor({}, "tabIconSelected");
+  const tabIconDefault = useThemeColor({}, "tabIconDefault");
+
+  return (
+    <Tabs>
+      <Tabs.Screen
+        name="menu/index"
+        options={{
+          title: "",
+          headerLeft: () => <MenuHeaderLeft />,
+          tabBarLabel: "Menú",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="home-outline" color={color} size={size - 7} />
+          ),
+          tabBarActiveTintColor: tabIconSelected,
+          tabBarInactiveTintColor: tabIconDefault,
+        }}
+      />
+      <Tabs.Screen
+        name="shopping-cart/index"
+        options={{
+          title: "",
+          tabBarLabel: "Carrito",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="cart-outline" color={color} size={size - 7} />
+          ),
+          tabBarActiveTintColor: tabIconSelected,
+          tabBarInactiveTintColor: tabIconDefault,
+        }}
+      />
+      <Tabs.Screen
+        name="orders/index"
+        options={{
+          title: "",
+          tabBarLabel: "pedidos",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="map-outline" color={color} size={size - 7} />
+          ),
+          tabBarActiveTintColor: tabIconSelected,
+          tabBarInactiveTintColor: tabIconDefault,
+        }}
+      />
+      <Tabs.Screen
+        name="profile/index"
+        options={{
+          title: "",
+          tabBarLabel: "Perfil",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="person-outline" color={color} size={size - 7} />
+          ),
+          tabBarActiveTintColor: tabIconSelected,
+          tabBarInactiveTintColor: tabIconDefault,
+        }}
+      />
+    </Tabs>
+  );
+};
+
+export default TabsLayout;
