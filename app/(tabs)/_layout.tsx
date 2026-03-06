@@ -7,9 +7,19 @@ import React from "react";
 const TabsLayout = () => {
   const tabIconSelected = useThemeColor({}, "tabIconSelected");
   const tabIconDefault = useThemeColor({}, "tabIconDefault");
+  const backgroundColor = useThemeColor(
+    { dark: "#000", light: "#fff" },
+    "background",
+  );
 
   return (
-    <Tabs>
+    <Tabs
+      screenOptions={{
+        sceneStyle: { backgroundColor: backgroundColor },
+        headerStyle: { backgroundColor },
+        headerShadowVisible: false,
+      }}
+    >
       <Tabs.Screen
         name="menu/index"
         options={{
@@ -26,7 +36,7 @@ const TabsLayout = () => {
       <Tabs.Screen
         name="shopping-cart/index"
         options={{
-          title: "",
+          title: "Mi carrito",
           tabBarLabel: "Carrito",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="cart-outline" color={color} size={size - 7} />
