@@ -2,6 +2,7 @@ import { ThemedText } from "@/components/themed-text";
 import { globalStyles } from "@/constants/globals";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
@@ -9,8 +10,16 @@ const MenuCart = () => {
   const primaryColor = useThemeColor({}, "primary");
   const backgroundColor = useThemeColor({}, "background");
 
+  const onPress = () => {
+    router.push("/(tabs)/menu/[id]");
+  };
+
   return (
-    <TouchableOpacity style={{ flex: 1 }} activeOpacity={0.7}>
+    <TouchableOpacity
+      onPress={onPress}
+      style={{ flex: 1, borderRadius: 16 }}
+      activeOpacity={0.7}
+    >
       <View
         style={[styles.container, globalStyles.shadow, { backgroundColor }]}
       >
@@ -19,7 +28,7 @@ const MenuCart = () => {
           style={[styles.image]}
           resizeMode="cover"
         />
-        <View style={[styles.descriptionContainer]}>
+        <View style={[styles.descriptionContainer, { backgroundColor }]}>
           <ThemedText style={{ fontSize: 19, fontWeight: "900" }}>
             Classic Burger
           </ThemedText>
@@ -29,7 +38,7 @@ const MenuCart = () => {
             >
               $ 12.99
             </Text>
-            <TouchableOpacity style={styles.addButton}>
+            <TouchableOpacity onPress={onPress} style={styles.addButton}>
               <Ionicons name="add-outline" size={18} color={"white"} />
             </TouchableOpacity>
           </View>
@@ -62,8 +71,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   addButton: {
-    width: 26,
-    height: 26,
+    width: 30,
+    height: 30,
     backgroundColor: "red",
     justifyContent: "center",
     alignItems: "center",

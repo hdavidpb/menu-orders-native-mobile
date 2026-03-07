@@ -1,6 +1,7 @@
 import { ThemedText } from "@/components/themed-text";
 import { globalStyles } from "@/constants/globals";
 import { useThemeColor } from "@/hooks/use-theme-color";
+import CustomCountButton from "@/presentation/theme/CustomCountButton";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
@@ -42,27 +43,22 @@ const ThemedShoppingCartCard = () => {
           $ 12.99
         </ThemedText>
         <View style={styles.CountContainer}>
-          <TouchableOpacity
+          <CustomCountButton
             disabled={count === 1}
             onPress={() => handleCount(true)}
-            activeOpacity={0.7}
-            style={[styles.CountButton, { borderColor: iconColor }]}
-          >
-            <Ionicons name="remove-outline" color={iconColor} size={20} />
-          </TouchableOpacity>
+            iconName="remove-outline"
+            iconColor={iconColor}
+            style={{ borderColor: iconColor, backgroundColor: "white" }}
+          />
+
           <ThemedText style={{ fontSize: 18, fontWeight: "900" }}>
             {count}
           </ThemedText>
-          <TouchableOpacity
+          <CustomCountButton
             onPress={() => handleCount()}
-            activeOpacity={0.7}
-            style={[
-              styles.CountButton,
-              { borderColor: primaryColor, backgroundColor: primaryColor },
-            ]}
-          >
-            <Ionicons name="add-outline" color={"white"} size={20} />
-          </TouchableOpacity>
+            iconName="add-outline"
+            iconColor={"white"}
+          />
         </View>
       </View>
       <TouchableOpacity activeOpacity={0.7} style={styles.removeItemContainer}>

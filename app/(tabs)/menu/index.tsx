@@ -9,7 +9,10 @@ const MenuScreen = () => {
     <FlatList
       ListHeaderComponent={() => (
         <>
-          <ThemedTextInput placeholder="Buscar hamburguesas..." />
+          <ThemedTextInput
+            iconName="search"
+            placeholder="Buscar hamburguesas..."
+          />
           <FilterList />
         </>
       )}

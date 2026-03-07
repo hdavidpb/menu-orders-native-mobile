@@ -32,6 +32,14 @@ const TabsLayout = () => {
           ),
           tabBarActiveTintColor: tabIconSelected,
           tabBarInactiveTintColor: tabIconDefault,
+          headerStyle: { backgroundColor: "#000" },
+        }}
+      />
+      <Tabs.Screen
+        name="menu/[id]"
+        options={{
+          headerShown: false,
+          href: null,
         }}
       />
       <Tabs.Screen
@@ -58,6 +66,7 @@ const TabsLayout = () => {
           tabBarInactiveTintColor: tabIconDefault,
         }}
       />
+
       <Tabs.Screen
         name="orders/[id]"
         options={{

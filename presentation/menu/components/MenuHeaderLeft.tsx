@@ -1,6 +1,6 @@
 import { ThemedText } from "@/components/themed-text";
 import React from "react";
-import { View } from "react-native";
+import { Image, View } from "react-native";
 
 const MenuHeaderLeft = () => {
   return (
@@ -13,16 +13,13 @@ const MenuHeaderLeft = () => {
         marginLeft: 10,
       }}
     >
-      <View
-        style={{
-          width: 50,
-          height: 50,
-          borderRadius: 8,
-          backgroundColor: "red",
-        }}
-      ></View>
+      <Image
+        source={require("../../../assets/images/logo.png")}
+        resizeMode="cover"
+        style={{ width: 54, height: 54 }}
+      />
       <View>
-        <ThemedText style={{ fontSize: 20, fontWeight: "900" }}>
+        <ThemedText style={{ fontSize: 24, fontWeight: "900", color: "white" }}>
           La Hamburguesa
         </ThemedText>
       </View>

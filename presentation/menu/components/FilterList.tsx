@@ -11,13 +11,13 @@ const FilterList = () => {
         <View
           style={{
             padding: 12,
-            borderRadius: 16,
+            borderRadius: 100,
             backgroundColor: "red",
             marginRight: 12,
             height: 45,
           }}
         >
-          <Text style={{ color: "white" }}>{item}</Text>
+          <Text style={{ color: "white", fontWeight: "500" }}>{item}</Text>
         </View>
       )}
       horizontal
