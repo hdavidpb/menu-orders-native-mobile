@@ -1,22 +1,31 @@
 import { ThemedText } from "@/components/themed-text";
 import { globalStyles } from "@/constants/globals";
 import { useThemeColor } from "@/hooks/use-theme-color";
+import { useMenuStore } from "@/presentation/menu/store/useMenuStore";
+import { useShoppingCartStore } from "@/presentation/shopping-cart/store/useShoppingCartStore";
 import CustomCountButton from "@/presentation/theme/CustomCountButton";
 import ThemedTextInput from "@/presentation/theme/ThemedTextInput";
 import { Ionicons } from "@expo/vector-icons";
-import React from "react";
+import { Redirect, router } from "expo-router";
+import React, { useState } from "react";
 import {
-    Image,
-    StyleSheet,
-    TouchableOpacity,
-    useWindowDimensions,
-    View,
+  Image,
+  KeyboardAvoidingView,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  useWindowDimensions,
+  View,
 } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const PreOrderMenuScreen = () => {
-  const { top } = useSafeAreaInsets();
-  const { width, height } = useWindowDimensions();
+  const [comments, setComments] = useState("");
+
+  const { addToCart, cart, removeFromCart } = useShoppingCartStore();
+  const { selectedMenu, increaseMenu, decreaseMenu, addDefaultCount } =
+    useMenuStore();
+
+  const { height } = useWindowDimensions();
 
   const backgroundColor = useThemeColor({}, "background");
   const primaryColor = useThemeColor({}, "primary");
@@ -28,150 +37,140 @@ const PreOrderMenuScreen = () => {
 
   const iconColor = useThemeColor({}, "icon");
 
+  const handleSendToCart = () => {
+    if (!selectedMenu) return;
+
+    const isInCart = cart.find((item) => item.id === selectedMenu.id);
+
+    if (isInCart) {
+      removeFromCart(selectedMenu.id);
+      addToCart({ ...selectedMenu, comments });
+    } else {
+      addToCart({ ...selectedMenu, comments });
+    }
+
+    setComments("");
+
+    router.push("/(tabs)/shopping-cart");
+  };
+
+  if (!selectedMenu) {
+    return <Redirect href={"/(tabs)/menu"} />;
+  }
   return (
-    <View style={{ paddingTop: top, flex: 1, alignItems: "center" }}>
-      <Image
-        style={{ width: "100%", height: 350 }}
-        source={require("../../../assets/images/burger.jpeg")}
-        resizeMode="cover"
-      />
-      <View
-        style={[
-          styles.descriptionContainer,
-          globalStyles.shadow,
-          {
-            width: width * 0.9,
-            height: height - 355,
-            backgroundColor,
-          },
-        ]}
-      >
-        <ThemedText
-          style={{ fontWeight: "600", fontSize: 28, marginBottom: 12 }}
-        >
-          Classic Burger
-        </ThemedText>
-        <ThemedText>
-          Hamburguesa clásica con queso cheddar, lechuga, tomate y nuestra salsa
-          especial
-        </ThemedText>
+    <KeyboardAvoidingView behavior="padding">
+      <ScrollView style={{ backgroundColor: "indigo" }}>
+        <Image
+          style={{ width: "100%", height: 280 }}
+          source={{ uri: selectedMenu?.image }}
+          resizeMode="cover"
+        />
         <View
           style={[
-            { borderRadius: 16, padding: 12 },
-
-            { marginTop: 12, backgroundColor: backgroundColorDesc },
+            styles.descriptionContainer,
+            globalStyles.shadow,
+            {
+              height: height - 330,
+              backgroundColor,
+            },
           ]}
         >
           <ThemedText
-            style={{ fontWeight: "600", fontSize: 24, marginBottom: 12 }}
+            style={{ fontWeight: "600", fontSize: 28, marginBottom: 12 }}
           >
-            Ingredientes
+            {selectedMenu?.name}
           </ThemedText>
-          <View style={{ flexDirection: "row", gap: 12, flexWrap: "wrap" }}>
-            <View
-              style={{
-                paddingHorizontal: 12,
-                paddingVertical: 4,
-                borderRadius: 100,
-                backgroundColor,
-              }}
-            >
-              <ThemedText>Carne 150gr 100% Angus</ThemedText>
-            </View>
-            <View
-              style={{
-                paddingHorizontal: 12,
-                paddingVertical: 4,
-                borderRadius: 100,
-                backgroundColor,
-              }}
-            >
-              <ThemedText>Queso chedar</ThemedText>
-            </View>
-            <View
-              style={{
-                paddingHorizontal: 12,
-                paddingVertical: 4,
-                borderRadius: 100,
-                backgroundColor,
-              }}
-            >
-              <ThemedText>Tomate</ThemedText>
-            </View>
-            <View
-              style={{
-                paddingHorizontal: 12,
-                paddingVertical: 4,
-                borderRadius: 100,
-                backgroundColor,
-              }}
-            >
-              <ThemedText>Cebolla</ThemedText>
-            </View>
-            <View
-              style={{
-                paddingHorizontal: 12,
-                paddingVertical: 4,
-                borderRadius: 100,
-                backgroundColor,
-              }}
-            >
-              <ThemedText>Salsa de la casa</ThemedText>
-            </View>
-          </View>
-        </View>
-        <View style={{ marginTop: 16 }}>
-          <ThemedTextInput
-            multiline
-            placeholder="¿Quieres comentar algo adicional?, ej: sin cebolla"
-            numberOfLines={4}
-          />
-        </View>
-        <View style={[styles.counterContainer]}>
+          <ThemedText>{selectedMenu?.description}</ThemedText>
           <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "center",
-              alignItems: "center",
-              gap: 16,
-            }}
-          >
-            <CustomCountButton
-              iconName="remove-outline"
-              iconColor={iconColor}
-              style={{
-                borderColor: iconColor,
-                backgroundColor: "white",
-              }}
-            />
-            <ThemedText style={{ fontSize: 24, fontWeight: "600" }}>
-              1
-            </ThemedText>
-            <CustomCountButton iconName="add-outline" iconColor={"white"} />
-          </View>
-          <TouchableOpacity
-            activeOpacity={0.7}
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "center",
-              paddingHorizontal: 12,
-              paddingVertical: 8,
-              borderRadius: 100,
-              backgroundColor: primaryColor,
-              gap: 6,
-            }}
+            style={[
+              { borderRadius: 16, padding: 12 },
+
+              { marginTop: 12, backgroundColor: backgroundColorDesc },
+            ]}
           >
             <ThemedText
-              style={{ fontSize: 16, fontWeight: "500", color: "white" }}
+              style={{ fontWeight: "600", fontSize: 24, marginBottom: 12 }}
             >
-              Agregar al carrito
+              Ingredientes
             </ThemedText>
-            <Ionicons name="cart-outline" size={23} color={"white"} />
-          </TouchableOpacity>
+            <View style={{ flexDirection: "row", gap: 12, flexWrap: "wrap" }}>
+              {selectedMenu?.ingredients.map((ingredient) => (
+                <View
+                  key={ingredient}
+                  style={{
+                    paddingHorizontal: 12,
+                    paddingVertical: 4,
+                    borderRadius: 100,
+                    backgroundColor,
+                  }}
+                >
+                  <ThemedText>{ingredient}</ThemedText>
+                </View>
+              ))}
+            </View>
+          </View>
+          <View style={{ marginTop: 16 }}>
+            <ThemedTextInput
+              multiline
+              placeholder="¿Quieres comentar algo adicional?, ej: sin cebolla"
+              numberOfLines={4}
+              value={comments}
+              onChangeText={(text) => setComments(text)}
+            />
+          </View>
+          <View style={[styles.counterContainer]}>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: 16,
+              }}
+            >
+              <CustomCountButton
+                disabled={selectedMenu!.quantity <= 1}
+                onPress={() => decreaseMenu()}
+                iconName="remove-outline"
+                iconColor={iconColor}
+                style={{
+                  borderColor: iconColor,
+                  backgroundColor: "white",
+                }}
+              />
+              <ThemedText style={{ fontSize: 24, fontWeight: "600" }}>
+                {selectedMenu.quantity}
+              </ThemedText>
+              <CustomCountButton
+                onPress={() => increaseMenu()}
+                iconName="add-outline"
+                iconColor={"white"}
+              />
+            </View>
+            <TouchableOpacity
+              onPress={handleSendToCart}
+              activeOpacity={0.7}
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+                paddingHorizontal: 12,
+                paddingVertical: 8,
+                borderRadius: 100,
+                backgroundColor: primaryColor,
+                gap: 6,
+              }}
+            >
+              <ThemedText
+                style={{ fontSize: 16, fontWeight: "500", color: "white" }}
+              >
+                Agregar al carrito
+              </ThemedText>
+              <Ionicons name="cart-outline" size={23} color={"white"} />
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-    </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -179,11 +178,7 @@ export default PreOrderMenuScreen;
 
 const styles = StyleSheet.create({
   descriptionContainer: {
-    position: "absolute",
-    bottom: 0,
-    borderTopRightRadius: 16,
-    borderTopLeftRadius: 16,
-    padding: 16,
+    padding: 24,
   },
   counterContainer: {
     position: "absolute",

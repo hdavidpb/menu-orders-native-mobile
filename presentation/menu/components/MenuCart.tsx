@@ -1,17 +1,34 @@
 import { ThemedText } from "@/components/themed-text";
 import { globalStyles } from "@/constants/globals";
 import { useThemeColor } from "@/hooks/use-theme-color";
+import { useShoppingCartStore } from "@/presentation/shopping-cart/store/useShoppingCartStore";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { IMenu } from "../interfaces/menu.interface";
+import { useMenuStore } from "../store/useMenuStore";
 
-const MenuCart = () => {
+interface Props {
+  menu: IMenu;
+}
+
+const MenuCart = ({ menu }: Props) => {
+  const { setSelectedMenu } = useMenuStore();
+  const { cart } = useShoppingCartStore();
+
   const primaryColor = useThemeColor({}, "primary");
   const backgroundColor = useThemeColor({}, "background");
 
+  const isInCart = cart.find((item) => item.id === menu.id);
+
   const onPress = () => {
-    router.push("/(tabs)/menu/[id]");
+    const isInCart = cart.find((item) => item.id === menu.id);
+    if (isInCart) {
+      setSelectedMenu({ ...menu, quantity: isInCart.quantity });
+    } else {
+      setSelectedMenu(menu);
+    }
+    router.push(`/(tabs)/menu/${menu.id.toString()}`);
   };
 
   return (
@@ -24,22 +41,28 @@ const MenuCart = () => {
         style={[styles.container, globalStyles.shadow, { backgroundColor }]}
       >
         <Image
-          source={require("../../../assets/images/burger.jpeg")}
+          source={{ uri: menu.image }}
           style={[styles.image]}
           resizeMode="cover"
         />
         <View style={[styles.descriptionContainer, { backgroundColor }]}>
           <ThemedText style={{ fontSize: 19, fontWeight: "900" }}>
-            Classic Burger
+            {menu.name}
           </ThemedText>
           <View style={[styles.actionPriceContainer]}>
             <Text
               style={{ fontSize: 18, color: primaryColor, fontWeight: "900" }}
             >
-              $ 12.99
+              $ {menu.price.toFixed(2)}
             </Text>
             <TouchableOpacity onPress={onPress} style={styles.addButton}>
-              <Ionicons name="add-outline" size={18} color={"white"} />
+              {isInCart ? (
+                <Text style={{ fontSize: 18, color: "white" }}>
+                  {isInCart.quantity}
+                </Text>
+              ) : (
+                <Ionicons name="add-outline" size={18} color={"white"} />
+              )}
             </TouchableOpacity>
           </View>
         </View>
@@ -64,6 +87,7 @@ const styles = StyleSheet.create({
   },
   descriptionContainer: {
     padding: 12,
+    borderRadius: 14,
   },
   actionPriceContainer: {
     flexDirection: "row",

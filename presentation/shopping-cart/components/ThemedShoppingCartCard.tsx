@@ -3,15 +3,24 @@ import { globalStyles } from "@/constants/globals";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import CustomCountButton from "@/presentation/theme/CustomCountButton";
 import { Ionicons } from "@expo/vector-icons";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Cart } from "../interfaces/shopping-cart.interface";
+import { useShoppingCartStore } from "../store/useShoppingCartStore";
 
-const ThemedShoppingCartCard = () => {
+interface Props {
+  item: Cart;
+}
+
+const ThemedShoppingCartCard = ({ item }: Props) => {
   const primaryColor = useThemeColor({}, "primary");
   const iconColor = useThemeColor({}, "icon");
   const backgroundColor = useThemeColor({}, "background");
 
   const [count, setCount] = useState(1);
+
+  const { removeFromCart, increaseCountInCart, decreaseCountInCart } =
+    useShoppingCartStore();
 
   const handleCount = (isDecrease?: boolean) => {
     if (isDecrease) {
@@ -26,42 +35,48 @@ const ThemedShoppingCartCard = () => {
     <View style={[styles.container, globalStyles.shadow, { backgroundColor }]}>
       <Image
         style={styles.image}
-        source={require("../../../assets/images/burger.jpeg")}
+        source={{ uri: item.image }}
         width={96}
         height={96}
         resizeMode="cover"
       />
       <View style={styles.descriptionContainer}>
-        <ThemedText
-          style={{ fontSize: 18, fontWeight: "600", marginBottom: 8 }}
-        >
-          Classic Burger
+        <ThemedText style={{ fontSize: 18, fontWeight: "600" }}>
+          {item.name}
         </ThemedText>
+        {item.comments && (
+          <ThemedText style={{ marginBottom: 8 }}>{item.comments}</ThemedText>
+        )}
+
         <ThemedText
           style={{ fontWeight: "500", color: primaryColor, marginBottom: 8 }}
         >
-          $ 12.99
+          $ {item.price.toFixed(2)}
         </ThemedText>
         <View style={styles.CountContainer}>
           <CustomCountButton
-            disabled={count === 1}
-            onPress={() => handleCount(true)}
+            disabled={item.quantity === 1}
+            onPress={() => decreaseCountInCart(item.id)}
             iconName="remove-outline"
             iconColor={iconColor}
             style={{ borderColor: iconColor, backgroundColor: "white" }}
           />
 
           <ThemedText style={{ fontSize: 18, fontWeight: "900" }}>
-            {count}
+            {item.quantity}
           </ThemedText>
           <CustomCountButton
-            onPress={() => handleCount()}
+            onPress={() => increaseCountInCart(item.id)}
             iconName="add-outline"
             iconColor={"white"}
           />
         </View>
       </View>
-      <TouchableOpacity activeOpacity={0.7} style={styles.removeItemContainer}>
+      <TouchableOpacity
+        onPress={() => removeFromCart(item.id)}
+        activeOpacity={0.7}
+        style={styles.removeItemContainer}
+      >
         <Ionicons color={primaryColor} size={26} name="trash-outline" />
       </TouchableOpacity>
     </View>
@@ -76,7 +91,7 @@ const styles = StyleSheet.create({
     padding: 16,
     flexDirection: "row",
     justifyContent: "center",
-    alignItems: "flex-end",
+    alignItems: "flex-start",
     gap: 16,
     marginBottom: 16,
     marginHorizontal: 8,
@@ -109,5 +124,6 @@ const styles = StyleSheet.create({
   removeItemContainer: {
     justifyContent: "flex-end",
     alignItems: "center",
+    alignSelf: "flex-end",
   },
 });

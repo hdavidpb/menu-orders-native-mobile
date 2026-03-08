@@ -3,10 +3,22 @@ import { globalStyles } from "@/constants/globals";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import React from "react";
 import { StyleSheet, View } from "react-native";
+import { useShoppingCartStore } from "../store/useShoppingCartStore";
+
+const DELIVER_COST = 2;
 
 const OrderResume = () => {
+  const { cart } = useShoppingCartStore();
+
   const primaryColor = useThemeColor({}, "primary");
   const backgroundColor = useThemeColor({}, "background");
+
+  const subtotal = cart.reduce(
+    (acc, item) => (acc += item.price * item.quantity),
+    0,
+  );
+
+  const TOTAL = DELIVER_COST + subtotal;
 
   return (
     <View style={[styles.container, globalStyles.shadow, { backgroundColor }]}>
@@ -15,11 +27,15 @@ const OrderResume = () => {
       </ThemedText>
       <View style={styles.textContainer}>
         <ThemedText style={styles.subtitleText}>Subtotal</ThemedText>
-        <ThemedText style={styles.subtitleText}>$39.97</ThemedText>
+        <ThemedText style={styles.subtitleText}>
+          ${subtotal.toFixed(2)}
+        </ThemedText>
       </View>
       <View style={styles.textContainer}>
         <ThemedText style={styles.subtitleText}>Envío</ThemedText>
-        <ThemedText style={styles.subtitleText}>$2.99</ThemedText>
+        <ThemedText style={styles.subtitleText}>
+          ${DELIVER_COST.toFixed(2)}
+        </ThemedText>
       </View>
 
       <View
@@ -34,7 +50,7 @@ const OrderResume = () => {
       <View style={[styles.textContainer, { marginBottom: 16 }]}>
         <ThemedText style={styles.titleText}>Total</ThemedText>
         <ThemedText style={[styles.titleText, { color: primaryColor }]}>
-          $42.96
+          ${TOTAL.toFixed(2)}
         </ThemedText>
       </View>
     </View>
