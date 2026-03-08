@@ -4,7 +4,7 @@ import OrderResume from "@/presentation/shopping-cart/components/OrderResume";
 import ThemedShoppingCartCard from "@/presentation/shopping-cart/components/ThemedShoppingCartCard";
 import { useShoppingCartStore } from "@/presentation/shopping-cart/store/useShoppingCartStore";
 import ThemedButton from "@/presentation/theme/ThemedButton";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import React from "react";
 import { FlatList, Image, View } from "react-native";
 
@@ -71,8 +71,13 @@ const ShoppingCartScreen = () => {
           paddingHorizontal: 16,
         }}
       >
-        <ThemedButton style={{ flex: 1, height: 48 }} textSize={17}>
-          Ir a pagar
+        <ThemedButton
+          //@ts-ignore
+          onPress={() => router.push("/order")}
+          style={{ flex: 1, height: 48 }}
+          textSize={17}
+        >
+          Ordenar
         </ThemedButton>
       </View>
     </View>

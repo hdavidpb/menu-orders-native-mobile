@@ -79,6 +79,19 @@ const TabsLayout = () => {
         }}
       />
       <Tabs.Screen
+        name="order/index"
+        options={{
+          title: "",
+          href: null,
+
+          headerLeft: () => (
+            <CustomBack
+              handleBack={() => router.push("/(tabs)/shopping-cart")}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="profile/index"
         options={{
           title: "",
