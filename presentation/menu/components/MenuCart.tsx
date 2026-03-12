@@ -41,19 +41,33 @@ const MenuCart = ({ menu }: Props) => {
         style={[styles.container, globalStyles.shadow, { backgroundColor }]}
       >
         <Image
-          source={{ uri: menu.image }}
+          source={
+            menu.image
+              ? { uri: menu.image }
+              : require("../../../assets/images/no-image.jpg")
+          }
           style={[styles.image]}
           resizeMode="cover"
         />
+
         <View style={[styles.descriptionContainer, { backgroundColor }]}>
-          <ThemedText style={{ fontSize: 19, fontWeight: "900" }}>
+          <ThemedText
+            numberOfLines={2}
+            style={{ fontSize: 19, fontWeight: "900" }}
+          >
             {menu.name}
+          </ThemedText>
+          <ThemedText style={{ fontSize: 12 }} numberOfLines={3}>
+            {menu.description}
           </ThemedText>
           <View style={[styles.actionPriceContainer]}>
             <Text
               style={{ fontSize: 18, color: primaryColor, fontWeight: "900" }}
             >
-              $ {Number(menu.price).toFixed(2)}
+              {Number(menu.price).toLocaleString("es-CO", {
+                style: "currency",
+                currency: "COP",
+              })}
             </Text>
             <TouchableOpacity onPress={onPress} style={styles.addButton}>
               {isInCart ? (
@@ -88,11 +102,13 @@ const styles = StyleSheet.create({
   descriptionContainer: {
     padding: 12,
     borderRadius: 14,
+    height: 155,
   },
   actionPriceContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
+    alignItems: "flex-end",
+    flex: 1,
   },
   addButton: {
     width: 30,

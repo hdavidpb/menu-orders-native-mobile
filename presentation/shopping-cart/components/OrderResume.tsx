@@ -5,7 +5,7 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import { useShoppingCartStore } from "../store/useShoppingCartStore";
 
-const DELIVER_COST = 2;
+const DELIVER_COST = 5000;
 
 const OrderResume = () => {
   const { cart } = useShoppingCartStore();
@@ -28,13 +28,19 @@ const OrderResume = () => {
       <View style={styles.textContainer}>
         <ThemedText style={styles.subtitleText}>Subtotal</ThemedText>
         <ThemedText style={styles.subtitleText}>
-          ${subtotal.toFixed(2)}
+          {subtotal.toLocaleString("es-CO", {
+            style: "currency",
+            currency: "COP",
+          })}
         </ThemedText>
       </View>
       <View style={styles.textContainer}>
         <ThemedText style={styles.subtitleText}>Envío</ThemedText>
         <ThemedText style={styles.subtitleText}>
-          ${DELIVER_COST.toFixed(2)}
+          {DELIVER_COST.toLocaleString("es-CO", {
+            style: "currency",
+            currency: "COP",
+          })}
         </ThemedText>
       </View>
 
@@ -50,7 +56,10 @@ const OrderResume = () => {
       <View style={[styles.textContainer, { marginBottom: 16 }]}>
         <ThemedText style={styles.titleText}>Total</ThemedText>
         <ThemedText style={[styles.titleText, { color: primaryColor }]}>
-          ${TOTAL.toFixed(2)}
+          {TOTAL.toLocaleString("es-CO", {
+            style: "currency",
+            currency: "COP",
+          })}
         </ThemedText>
       </View>
     </View>

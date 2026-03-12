@@ -42,7 +42,10 @@ const ThemedShoppingCartCard = ({ item }: Props) => {
         <ThemedText
           style={{ fontWeight: "500", color: primaryColor, marginBottom: 8 }}
         >
-          $ {Number(item.price).toFixed(2)}
+          {Number(item.price).toLocaleString("es-CO", {
+            style: "currency",
+            currency: "COP",
+          })}
         </ThemedText>
         <View style={styles.CountContainer}>
           <CustomCountButton

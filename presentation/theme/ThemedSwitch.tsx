@@ -1,15 +1,15 @@
 import { ThemedText } from "@/components/themed-text";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import React from "react";
-import { Switch, View } from "react-native";
+import { Switch, SwitchProps, View } from "react-native";
 
-interface Props {
+interface Props extends SwitchProps {
   value: boolean;
   label?: string;
-  onChange: (value: boolean) => void;
+  onChangeValue: (value: boolean) => void;
 }
 
-const ThemedSwitch = ({ value, label, onChange }: Props) => {
+const ThemedSwitch = ({ value, label, onChangeValue, ...rest }: Props) => {
   const primaryColor = useThemeColor({}, "primary");
 
   return (
@@ -23,13 +23,14 @@ const ThemedSwitch = ({ value, label, onChange }: Props) => {
       <Switch
         value={value}
         onValueChange={(value) => {
-          onChange(value);
+          onChangeValue(value);
         }}
         trackColor={{ true: primaryColor }}
         thumbColor={value ? primaryColor : "gray"}
+        {...rest}
       />
 
-      {label && <ThemedText style={{ fontWeight: "600" }}>{label}</ThemedText>}
+      {label && <ThemedText style={{ fontWeight: "400" }}>{label}</ThemedText>}
     </View>
   );
 };

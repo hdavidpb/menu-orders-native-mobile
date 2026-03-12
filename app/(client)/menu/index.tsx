@@ -1,12 +1,14 @@
-import { menuData } from "@/constants/fakeData";
 import MenuCart from "@/presentation/menu/components/MenuCart";
+import { useQueryProducts } from "@/presentation/menu/hooks/useQueryProducts";
 import { Product } from "@/presentation/menu/interfaces/menu.interface";
 import ThemedTextInput from "@/presentation/theme/ThemedTextInput";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FlatList, TextInput, View } from "react-native";
 
 const MenuScreen = () => {
-  const [menu, setMenu] = useState<Product[]>(menuData);
+  const { queryProducts } = useQueryProducts();
+
+  const [menu, setMenu] = useState<Product[]>([]);
 
   const showIcon = useRef<boolean>(false);
 
@@ -16,17 +18,23 @@ const MenuScreen = () => {
     if (!showIcon.current) {
       showIcon.current = true;
     }
-    const filteredMenu = menuData.filter((item) =>
+    const filteredMenu = queryProducts.data?.filter((item) =>
       item.name.toLowerCase().includes(text.toLowerCase()),
     );
-    setMenu(filteredMenu);
+    setMenu(filteredMenu ?? []);
   };
 
   const handleClearInput = () => {
     inputRef.current?.clear();
-    setMenu(menuData);
+    setMenu(queryProducts.data ?? []);
     showIcon.current = false;
   };
+
+  useEffect(() => {
+    if (queryProducts.data) {
+      setMenu(queryProducts.data);
+    }
+  }, [queryProducts.data]);
 
   return (
     <FlatList

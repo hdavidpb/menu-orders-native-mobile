@@ -5,9 +5,9 @@ import { View } from "react-native";
 
 const DashboardScreen = () => {
   return (
-    <View style={{ padding: 8 }}>
-      <ThemedButton onPress={() => router.push("/menu-settings/[id]")}>
-        Ir a producto
+    <View style={{ padding: 18 }}>
+      <ThemedButton onPress={() => router.push("/menu-settings")}>
+        Ir a config
       </ThemedButton>
     </View>
   );

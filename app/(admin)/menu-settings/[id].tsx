@@ -5,7 +5,7 @@ import ThemedSwitch from "@/presentation/theme/ThemedSwitch";
 import ThemedTagsField from "@/presentation/theme/ThemedTagsField";
 import ThemedTextInput from "@/presentation/theme/ThemedTextInput";
 import { Ionicons } from "@expo/vector-icons";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Image,
   KeyboardAvoidingView,
@@ -15,8 +15,8 @@ import {
   View,
 } from "react-native";
 
-import { useQueryProduct } from "@/presentation/products-config/hooks/useQueryProduct";
-import { uploadImageToCloudinary } from "@/presentation/products-config/services/upload-image.service";
+import { Product } from "@/presentation/menu/interfaces/menu.interface";
+import { useQueryProductConfig } from "@/presentation/products-config/hooks/useQueryProductConfig";
 import * as ImagePicker from "expo-image-picker";
 import { useLocalSearchParams } from "expo-router";
 import { Alert } from "react-native";
@@ -24,19 +24,18 @@ import { Alert } from "react-native";
 const MenuSettingByIdScreen = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
 
-  const {} = useQueryProduct(id);
+  const { queryProduct } = useQueryProductConfig(id);
 
   const iconColor = useThemeColor({}, "icon");
   const primaryColor = useThemeColor({}, "primary");
 
-  const [image, setImage] = useState("");
-
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<Partial<Product>>({
     name: "",
     description: "",
     price: "",
-    ingredientes: [],
-    isAvailable: false,
+    ingredients: [],
+    isAvailable: true,
+    image: "",
   });
 
   const [errors, setErrors] = useState({
@@ -71,21 +70,28 @@ const MenuSettingByIdScreen = () => {
     });
 
     if (!result.canceled) {
-      setImage(result.assets[0].uri);
+      setForm((prev) => ({ ...prev, image: result.assets[0].uri }));
     }
   };
 
   const onSubmit = async () => {
-    await uploadImageToCloudinary(image);
+    console.log("FORM: ", form);
+    // await uploadImageToCloudinary(form.image);
   };
 
   const onBlurCheckEmptyField = (key: keyof typeof form) => {
-    if (form[key].toString().length === 0) {
+    if (form[key]!.toString().length === 0) {
       setErrors((prev) => ({ ...prev, [key]: true }));
     } else {
       setErrors((prev) => ({ ...prev, [key]: false }));
     }
   };
+
+  useEffect(() => {
+    if (queryProduct.data) {
+      setForm(queryProduct.data);
+    }
+  }, [queryProduct.data]);
 
   return (
     <KeyboardAvoidingView>
@@ -93,22 +99,22 @@ const MenuSettingByIdScreen = () => {
         <ThemedText style={{ fontSize: 27, fontWeight: "600" }}>
           Nuevo producto
         </ThemedText>
-        {image && (
+        {form.image && (
           <View style={{ height: 193, marginTop: 16 }}>
             <Pressable
-              onPress={() => setImage("")}
+              onPress={() => setForm((prev) => ({ ...prev, image: "" }))}
               style={[styles.clearImageButton]}
             >
               <Ionicons name="close-outline" size={25} />
             </Pressable>
             <Image
-              source={{ uri: image }}
+              source={{ uri: form.image }}
               style={[styles.image]}
               resizeMode="cover"
             />
           </View>
         )}
-        {!image && (
+        {!form.image && (
           <Pressable
             onPress={pickImage}
             style={({ pressed }) => [
@@ -132,6 +138,7 @@ const MenuSettingByIdScreen = () => {
         <View style={{ gap: 16, marginTop: 20 }}>
           <ThemedTextInput
             label="Nombre *"
+            value={form.name}
             placeholder="Ej: Classic"
             onChangeText={(text) => handleChange("name", text)}
             onBlur={() => onBlurCheckEmptyField("name")}
@@ -140,6 +147,7 @@ const MenuSettingByIdScreen = () => {
           />
           <ThemedTextInput
             label="Description *"
+            value={form.description}
             placeholder="Describe el producto"
             multiline
             numberOfLines={4}
@@ -150,6 +158,7 @@ const MenuSettingByIdScreen = () => {
           />
           <ThemedTextInput
             label="Precio *"
+            value={form.price}
             placeholder="Ej: 30000"
             multiline
             numberOfLines={4}
@@ -162,20 +171,18 @@ const MenuSettingByIdScreen = () => {
 
           <ThemedTagsField
             label="Ingredientes"
-            values={form.ingredientes}
-            onChange={(tags) => handleChange("ingredientes", tags)}
+            values={form.ingredients!}
+            onChange={(tags) => handleChange("ingredients", tags)}
             placeholder="Ej. carne 150gr"
           />
           <ThemedSwitch
-            value={form.isAvailable}
+            value={form.isAvailable!}
             onChange={(value) => handleChange("isAvailable", value)}
             label="Disponible para la venta"
           />
 
           <View style={{ marginTop: 20, gap: 12 }}>
-            <ThemedButton disabled={!image} onPress={onSubmit}>
-              Guardar Producto
-            </ThemedButton>
+            <ThemedButton onPress={onSubmit}>Guardar Producto</ThemedButton>
             <ThemedButton variant="outline">Cancelar</ThemedButton>
           </View>
         </View>

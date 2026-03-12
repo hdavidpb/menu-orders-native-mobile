@@ -1,10 +1,12 @@
-import { menuData } from "@/constants/fakeData";
 import { create } from "zustand";
 import { Product } from "../interfaces/menu.interface";
+import { getProducts } from "../services/get-products";
 
 interface MenuState {
   menu: Product[];
   selectedMenu?: Product;
+
+  getProductsToStore: () => Promise<Product[]>;
 
   addDefaultCount: (quantity: number) => void;
 
@@ -17,9 +19,20 @@ interface MenuState {
 }
 
 export const useMenuStore = create<MenuState>((set, get) => ({
-  menu: menuData,
-
+  menu: [],
   selectedMenu: undefined,
+
+  getProductsToStore: async () => {
+    const products = await getProducts();
+
+    if (products) {
+      set({ menu: products });
+      return products;
+    } else {
+      set({ menu: [] });
+      return [];
+    }
+  },
 
   addDefaultCount: (quantity) => {
     const selectedMenu = get().selectedMenu!;
