@@ -1,10 +1,10 @@
 import { menuData } from "@/constants/fakeData";
 import { create } from "zustand";
-import { IMenu } from "../interfaces/menu.interface";
+import { Product } from "../interfaces/menu.interface";
 
 interface MenuState {
-  menu: IMenu[];
-  selectedMenu?: IMenu;
+  menu: Product[];
+  selectedMenu?: Product;
 
   addDefaultCount: (quantity: number) => void;
 
@@ -13,7 +13,7 @@ interface MenuState {
 
   clearSelectedMenu: () => void;
 
-  setSelectedMenu: (menu: IMenu) => void;
+  setSelectedMenu: (menu: Product) => void;
 }
 
 export const useMenuStore = create<MenuState>((set, get) => ({

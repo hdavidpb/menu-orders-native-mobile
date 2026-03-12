@@ -39,7 +39,7 @@ const ShoppingCartScreen = () => {
             fontSize: 18,
             fontWeight: "500",
           }}
-          href={"/(tabs)/menu"}
+          href={"/(client)/menu"}
         >
           Ir al menú
         </Link>

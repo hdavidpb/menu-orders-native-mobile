@@ -1,4 +1,4 @@
-export interface Product {
+export interface ProductResponse {
   id: string;
   name: string;
   price: string;
@@ -6,7 +6,7 @@ export interface Product {
   description: string;
   isAvailable: boolean;
   image: string;
-  quantity: number;
+  quantity?: number;
   createdAt: Date;
   updatedAt: Date;
 }

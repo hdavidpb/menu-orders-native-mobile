@@ -74,7 +74,7 @@ const TabsLayout = () => {
           href: null,
 
           headerLeft: () => (
-            <CustomBack handleBack={() => router.push("/(tabs)/orders")} />
+            <CustomBack handleBack={() => router.push("/(client)/orders")} />
           ),
         }}
       />
@@ -86,7 +86,7 @@ const TabsLayout = () => {
 
           headerLeft: () => (
             <CustomBack
-              handleBack={() => router.push("/(tabs)/shopping-cart")}
+              handleBack={() => router.push("/(client)/shopping-cart")}
             />
           ),
         }}

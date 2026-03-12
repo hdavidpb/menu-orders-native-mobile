@@ -1,6 +1,6 @@
-import { IMenu } from "@/presentation/menu/interfaces/menu.interface";
+import { Product } from "@/presentation/menu/interfaces/menu.interface";
 
-export const menuData: IMenu[] = [
+export const menuData: Product[] = [
   {
     id: 1,
     name: "Classic Burger",

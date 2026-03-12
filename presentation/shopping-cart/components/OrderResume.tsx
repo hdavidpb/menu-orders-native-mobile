@@ -14,7 +14,7 @@ const OrderResume = () => {
   const backgroundColor = useThemeColor({}, "background");
 
   const subtotal = cart.reduce(
-    (acc, item) => (acc += item.price * item.quantity),
+    (acc, item) => (acc += Number(item.price) * Number(item.quantity)),
     0,
   );
 

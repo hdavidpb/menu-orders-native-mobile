@@ -1,34 +1,46 @@
 import { globalStyles } from "@/constants/globals";
 import { useThemeColor } from "@/hooks/use-theme-color";
-import { Pressable, PressableProps, Text } from "react-native";
+import { Pressable, PressableProps, StyleSheet, Text } from "react-native";
 
 interface Props extends PressableProps {
   children: string;
   textSize?: number;
+  variant?: "outline" | "fulfill";
 }
 
-const ThemedButton = ({ children, textSize = 16, style, ...res }: Props) => {
-  const backgroundColor = useThemeColor({}, "primary");
+const ThemedButton = ({
+  children,
+  textSize = 16,
+  style,
+  variant = "fulfill",
+  ...res
+}: Props) => {
+  const primaryColor = useThemeColor({}, "primary");
+
+  const borderColor = useThemeColor({}, "primary");
 
   return (
     <Pressable
       style={({ pressed }) => [
-        globalStyles.shadow,
+        variant === "fulfill" && globalStyles.shadow,
+        styles.defaultStyles,
         {
-          paddingHorizontal: 24,
-          paddingVertical: 12,
-          borderRadius: 16,
-          backgroundColor,
+          borderWidth: 1,
+          borderColor: borderColor,
+          backgroundColor: variant === "fulfill" ? primaryColor : "transparent",
           opacity: pressed ? 0.7 : 1,
-          justifyContent: "center",
-          alignItems: "center",
-          flexDirection: "row",
         },
         style as any,
       ]}
       {...res}
     >
-      <Text style={{ color: "white", fontSize: textSize, fontWeight: "600" }}>
+      <Text
+        style={{
+          color: variant === "fulfill" ? "#fff" : primaryColor,
+          fontSize: textSize,
+          fontWeight: "600",
+        }}
+      >
         {children}
       </Text>
     </Pressable>
@@ -36,3 +48,15 @@ const ThemedButton = ({ children, textSize = 16, style, ...res }: Props) => {
 };
 
 export default ThemedButton;
+
+const styles = StyleSheet.create({
+  defaultStyles: {
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 16,
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+  },
+  outline: {},
+});

@@ -1,12 +1,12 @@
 import { menuData } from "@/constants/fakeData";
 import MenuCart from "@/presentation/menu/components/MenuCart";
-import { IMenu } from "@/presentation/menu/interfaces/menu.interface";
+import { Product } from "@/presentation/menu/interfaces/menu.interface";
 import ThemedTextInput from "@/presentation/theme/ThemedTextInput";
 import React, { useRef, useState } from "react";
 import { FlatList, TextInput, View } from "react-native";
 
 const MenuScreen = () => {
-  const [menu, setMenu] = useState<IMenu[]>(menuData);
+  const [menu, setMenu] = useState<Product[]>(menuData);
 
   const showIcon = useRef<boolean>(false);
 

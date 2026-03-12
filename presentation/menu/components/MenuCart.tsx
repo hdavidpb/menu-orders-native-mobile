@@ -5,11 +5,11 @@ import { useShoppingCartStore } from "@/presentation/shopping-cart/store/useShop
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { IMenu } from "../interfaces/menu.interface";
+import { Product } from "../interfaces/menu.interface";
 import { useMenuStore } from "../store/useMenuStore";
 
 interface Props {
-  menu: IMenu;
+  menu: Product;
 }
 
 const MenuCart = ({ menu }: Props) => {
@@ -28,7 +28,7 @@ const MenuCart = ({ menu }: Props) => {
     } else {
       setSelectedMenu(menu);
     }
-    router.push(`/(tabs)/menu/${menu.id.toString()}`);
+    router.push(`/(client)/menu/${menu.id.toString()}`);
   };
 
   return (
@@ -53,7 +53,7 @@ const MenuCart = ({ menu }: Props) => {
             <Text
               style={{ fontSize: 18, color: primaryColor, fontWeight: "900" }}
             >
-              $ {menu.price.toFixed(2)}
+              $ {Number(menu.price).toFixed(2)}
             </Text>
             <TouchableOpacity onPress={onPress} style={styles.addButton}>
               {isInCart ? (

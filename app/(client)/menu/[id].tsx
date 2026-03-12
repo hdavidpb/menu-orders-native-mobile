@@ -51,11 +51,11 @@ const PreOrderMenuScreen = () => {
 
     setComments("");
 
-    router.push("/(tabs)/shopping-cart");
+    router.push("/(client)/shopping-cart");
   };
 
   if (!selectedMenu) {
-    return <Redirect href={"/(tabs)/menu"} />;
+    return <Redirect href={"/(client)/menu"} />;
   }
   return (
     <KeyboardAvoidingView behavior="padding">

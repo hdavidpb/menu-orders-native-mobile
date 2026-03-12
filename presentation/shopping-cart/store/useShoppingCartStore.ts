@@ -4,11 +4,11 @@ import { Cart } from "../interfaces/shopping-cart.interface";
 interface ShoppingCartState {
   cart: Cart[];
   addToCart: (menu: Cart) => void;
-  removeFromCart: (menuId: number) => void;
+  removeFromCart: (menuId: string) => void;
 
-  increaseCountInCart: (id: number) => void;
+  increaseCountInCart: (id: string) => void;
 
-  decreaseCountInCart: (id: number) => void;
+  decreaseCountInCart: (id: string) => void;
 }
 
 export const useShoppingCartStore = create<ShoppingCartState>((set, get) => ({

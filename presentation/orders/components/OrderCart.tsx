@@ -13,7 +13,7 @@ const OrderCart = () => {
 
   return (
     <TouchableOpacity
-      onPress={() => router.push("/(tabs)/orders/[id]")}
+      onPress={() => router.push("/(client)/orders/[id]")}
       activeOpacity={0.7}
       style={[styles.container, globalStyles.shadow, { backgroundColor }]}
     >

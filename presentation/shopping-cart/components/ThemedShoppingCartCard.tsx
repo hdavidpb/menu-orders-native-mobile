@@ -22,15 +22,6 @@ const ThemedShoppingCartCard = ({ item }: Props) => {
   const { removeFromCart, increaseCountInCart, decreaseCountInCart } =
     useShoppingCartStore();
 
-  const handleCount = (isDecrease?: boolean) => {
-    if (isDecrease) {
-      if (count === 1) return;
-      setCount((prev) => Math.max(prev - 1, 0));
-      return;
-    }
-    setCount((prev) => prev + 1);
-  };
-
   return (
     <View style={[styles.container, globalStyles.shadow, { backgroundColor }]}>
       <Image
@@ -51,7 +42,7 @@ const ThemedShoppingCartCard = ({ item }: Props) => {
         <ThemedText
           style={{ fontWeight: "500", color: primaryColor, marginBottom: 8 }}
         >
-          $ {item.price.toFixed(2)}
+          $ {Number(item.price).toFixed(2)}
         </ThemedText>
         <View style={styles.CountContainer}>
           <CustomCountButton

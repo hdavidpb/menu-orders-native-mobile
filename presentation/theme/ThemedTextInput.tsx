@@ -5,6 +5,7 @@ import React from "react";
 import {
   Pressable,
   StyleSheet,
+  Text,
   TextInput,
   TextInputProps,
   View,
@@ -15,7 +16,10 @@ interface Props extends TextInputProps {
   iconName?: keyof typeof Ionicons.glyphMap;
   iconRightName?: keyof typeof Ionicons.glyphMap;
   onIconRightPress?: VoidFunction;
+  flex1Row?: boolean;
   label?: string;
+  error?: boolean;
+  errorMessage?: string;
 }
 
 export default function ThemedTextInput({
@@ -23,6 +27,9 @@ export default function ThemedTextInput({
   iconRightName,
   onIconRightPress,
   label,
+  flex1Row,
+  error,
+  errorMessage,
   ...props
 }: Props) {
   const backgroundColor = useThemeColor({}, "background");
@@ -30,14 +37,24 @@ export default function ThemedTextInput({
   const iconColor = useThemeColor({}, "icon");
 
   return (
-    <View style={{ justifyContent: "flex-start", alignItems: "flex-start" }}>
+    <View
+      style={[
+        { justifyContent: "flex-start", alignItems: "flex-start" },
+        flex1Row && { flex: 1 },
+      ]}
+    >
       {label && (
         <ThemedText style={{ fontWeight: "500", marginLeft: 6, fontSize: 15 }}>
           {label}
         </ThemedText>
       )}
 
-      <View style={[styles.container, { backgroundColor }]}>
+      <View
+        style={[
+          styles.container,
+          { backgroundColor, borderColor: error ? "red" : "#687076a9" },
+        ]}
+      >
         {iconName && <Ionicons name={iconName} color={iconColor} size={23} />}
         <TextInput
           style={{ color: textColor, flex: 1 }}
@@ -50,6 +67,11 @@ export default function ThemedTextInput({
           </Pressable>
         )}
       </View>
+      {errorMessage && error && (
+        <Text style={{ color: "red", fontSize: 14, marginLeft: 3 }}>
+          {errorMessage}
+        </Text>
+      )}
     </View>
   );
 }
@@ -58,7 +80,6 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     padding: 9,
-    borderColor: "#687076a9",
     borderWidth: 1,
     borderRadius: 16,
     flexDirection: "row",
