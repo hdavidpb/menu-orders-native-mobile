@@ -215,10 +215,6 @@ const MenuSettingByIdScreen = () => {
                   createOrUpdateProductMutation.isPending || isLoading
                     ? 0.5
                     : undefined,
-                borderColor:
-                  createOrUpdateProductMutation.isPending || isLoading
-                    ? "#46464687"
-                    : undefined,
               }}
             >
               {createOrUpdateProductMutation.isPending || isLoading
