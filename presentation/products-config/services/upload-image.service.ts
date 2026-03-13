@@ -10,7 +10,7 @@ const CLOUDINARY_BASE_URL = `https://api.cloudinary.com/v1_1/${cloudName}/image/
 
 export const uploadImageToCloudinary = async (
   imageUri: string,
-): Promise<UploadImageResponse | null> => {
+): Promise<string | null> => {
   const fileName = imageUri.split("/").pop() ?? `image-${Date.now()}.jpg`;
   const formData = new FormData() as any;
 
@@ -34,7 +34,7 @@ export const uploadImageToCloudinary = async (
       },
     );
 
-    return response.data;
+    return response.data.secure_url;
   } catch (error) {
     console.log("ERROR AL SUBIR IMAGEN: ", error);
     return null;

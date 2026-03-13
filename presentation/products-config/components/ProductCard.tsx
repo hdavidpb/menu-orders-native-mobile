@@ -3,8 +3,10 @@ import { globalStyles } from "@/constants/globals";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { Product } from "@/presentation/menu/interfaces/menu.interface";
 import ThemedSwitch from "@/presentation/theme/ThemedSwitch";
+import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
 import React, { useState } from "react";
-import { Image, TouchableOpacity, View } from "react-native";
+import { Image, Pressable, TouchableOpacity, View } from "react-native";
 import { useQueryProductConfig } from "../hooks/useQueryProductConfig";
 
 interface Props {
@@ -14,6 +16,8 @@ interface Props {
 const ProductCard = ({ product }: Props) => {
   const primaryColor = useThemeColor({}, "primary");
   const backgroundColor = useThemeColor({}, "background");
+
+  const iconColor = useThemeColor({}, "icon");
 
   const { updateStatusMutation } = useQueryProductConfig(product.id);
 
@@ -34,8 +38,14 @@ const ProductCard = ({ product }: Props) => {
     }
   };
 
+  const handleGoToEdit = () => {
+    router.push(`/menu-settings/${product.id}`);
+  };
+
   return (
     <TouchableOpacity
+      onPress={handleGoToEdit}
+      activeOpacity={0.7}
       style={[
         globalStyles.shadow,
         {
@@ -46,10 +56,13 @@ const ProductCard = ({ product }: Props) => {
           alignItems: "center",
           gap: 12,
           backgroundColor,
-          marginVertical: 20,
+          marginVertical: 12,
         },
       ]}
     >
+      <Pressable style={{ position: "absolute", top: 10, right: 10 }}>
+        <Ionicons name="pencil-outline" size={20} color={iconColor} />
+      </Pressable>
       <Image
         source={
           product.image

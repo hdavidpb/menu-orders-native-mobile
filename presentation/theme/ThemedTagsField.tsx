@@ -21,7 +21,10 @@ export default function ThemedTagsField({
 }: Props) {
   const [tag, setTag] = useState("");
 
-  const tagColor = useThemeColor({ dark: "#000", light: "#F3F4F6" }, "icon");
+  const tagColor = useThemeColor(
+    { dark: "#232323e1", light: "#F3F4F6" },
+    "icon",
+  );
   const iconColor = useThemeColor({}, "icon");
 
   const handleAddTag = () => {

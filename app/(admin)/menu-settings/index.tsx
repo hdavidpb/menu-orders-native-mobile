@@ -1,3 +1,4 @@
+import { ThemedText } from "@/components/themed-text";
 import { useQueryProducts } from "@/presentation/menu/hooks/useQueryProducts";
 import { Product } from "@/presentation/menu/interfaces/menu.interface";
 import ProductCard from "@/presentation/products-config/components/ProductCard";
@@ -40,10 +41,15 @@ const MenuSettingsScreen = () => {
     <FlatList
       ListHeaderComponent={() => (
         <>
+          <ThemedText
+            style={{ fontSize: 30, fontWeight: "600", paddingVertical: 20 }}
+          >
+            Gestionar Menú
+          </ThemedText>
           <ThemedTextInput
             ref={inputRef}
             iconName="search"
-            placeholder="Buscar hamburguesas..."
+            placeholder="Buscar..."
             onChangeText={(text) => onFilterByName(text)}
             iconRightName={showIcon.current ? "close-circle" : undefined}
             onIconRightPress={handleClearInput}

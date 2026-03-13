@@ -15,16 +15,23 @@ import {
   View,
 } from "react-native";
 
-import { Product } from "@/presentation/menu/interfaces/menu.interface";
+import {
+  Product,
+  ProductLike,
+} from "@/presentation/menu/interfaces/menu.interface";
 import { useQueryProductConfig } from "@/presentation/products-config/hooks/useQueryProductConfig";
+import { uploadImageToCloudinary } from "@/presentation/products-config/services/upload-image.service";
 import * as ImagePicker from "expo-image-picker";
 import { useLocalSearchParams } from "expo-router";
 import { Alert } from "react-native";
 
 const MenuSettingByIdScreen = () => {
+  const [isLoading, setIsLoading] = useState(false);
+
   const { id } = useLocalSearchParams<{ id: string }>();
 
-  const { queryProduct } = useQueryProductConfig(id);
+  const { queryProduct, createOrUpdateProductMutation } =
+    useQueryProductConfig(id);
 
   const iconColor = useThemeColor({}, "icon");
   const primaryColor = useThemeColor({}, "primary");
@@ -75,8 +82,25 @@ const MenuSettingByIdScreen = () => {
   };
 
   const onSubmit = async () => {
-    console.log("FORM: ", form);
-    // await uploadImageToCloudinary(form.image);
+    console.log("FORM: ", JSON.stringify(form, null, 2));
+    let imageToUpload = "";
+    if (form.image) {
+      setIsLoading(true);
+      const uploadedImage = await uploadImageToCloudinary(form.image);
+      imageToUpload = uploadedImage ? uploadedImage : "";
+      setIsLoading(false);
+    }
+
+    const payload: ProductLike = {
+      name: form.name!,
+      description: form.description!,
+      isAvailable: form.isAvailable!,
+      image: imageToUpload,
+      price: Number(form.price),
+      ingredients: form.ingredients!,
+    };
+
+    createOrUpdateProductMutation.mutate(payload);
   };
 
   const onBlurCheckEmptyField = (key: keyof typeof form) => {
@@ -177,12 +201,30 @@ const MenuSettingByIdScreen = () => {
           />
           <ThemedSwitch
             value={form.isAvailable!}
-            onChange={(value) => handleChange("isAvailable", value)}
+            onChangeValue={(value) => handleChange("isAvailable", value)}
             label="Disponible para la venta"
           />
 
           <View style={{ marginTop: 20, gap: 12 }}>
-            <ThemedButton onPress={onSubmit}>Guardar Producto</ThemedButton>
+            <ThemedButton
+              variant="fulfill"
+              disabled={createOrUpdateProductMutation.isPending || isLoading}
+              onPress={onSubmit}
+              style={{
+                opacity:
+                  createOrUpdateProductMutation.isPending || isLoading
+                    ? 0.5
+                    : undefined,
+                borderColor:
+                  createOrUpdateProductMutation.isPending || isLoading
+                    ? "#46464687"
+                    : undefined,
+              }}
+            >
+              {createOrUpdateProductMutation.isPending || isLoading
+                ? "Guardando..."
+                : "Guardar Producto"}
+            </ThemedButton>
             <ThemedButton variant="outline">Cancelar</ThemedButton>
           </View>
         </View>

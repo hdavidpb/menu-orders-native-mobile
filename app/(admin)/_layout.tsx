@@ -1,9 +1,10 @@
 import { useThemeColor } from "@/hooks/use-theme-color";
-import { Stack } from "expo-router";
+import ThemedButton from "@/presentation/theme/ThemedButton";
+import { router, Stack } from "expo-router";
 import React from "react";
 
 const AdminLayout = () => {
-  const backgroundColor = useThemeColor({}, "background");
+  const backgroundColor = useThemeColor({ dark: "#000" }, "background");
 
   return (
     <Stack
@@ -16,6 +17,20 @@ const AdminLayout = () => {
         name="dashboard/index"
         options={{
           title: "Dashboard",
+        }}
+      />
+      <Stack.Screen
+        name="menu-settings/index"
+        options={{
+          title: "",
+          headerRight: () => (
+            <ThemedButton
+              onPress={() => router.push("/menu-settings/new")}
+              style={{ paddingVertical: 7 }}
+            >
+              + Nueva
+            </ThemedButton>
+          ),
         }}
       />
       <Stack.Screen

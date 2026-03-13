@@ -10,3 +10,12 @@ export interface Product {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface ProductLike {
+  name: string;
+  price: number;
+  ingredients: string[];
+  description: string;
+  isAvailable: boolean;
+  image: string;
+}

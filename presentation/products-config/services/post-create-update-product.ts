@@ -1,43 +1,54 @@
 import { apiService } from "@/core/api/api";
-import { BodyCreateUpdateProduct } from "../interfaces/body-create-update-product.interface";
+import {
+  Product,
+  ProductLike,
+} from "@/presentation/menu/interfaces/menu.interface";
 
 export const postCreateOrUpdateProduct = async (
-  productLike: BodyCreateUpdateProduct,
-) => {
+  productId: string,
+  productLike: Partial<ProductLike>,
+): Promise<Product | null> => {
   try {
-    if (productLike.id === "new") {
+    if (productId === "new") {
       return await postCreateProduct(productLike);
     }
 
-    return await putUpdateProduct(productLike);
+    return await putUpdateProduct(productId, productLike);
   } catch (error) {
     console.log(error);
+    return null;
   }
 };
 
 export const postCreateProduct = async (
-  productLike: BodyCreateUpdateProduct,
-) => {
+  productLike: Partial<ProductLike>,
+): Promise<Product | null> => {
   try {
-    const { data } = await apiService.post(
-      `/products/update/${productLike.id}`,
+    const { data } = await apiService.post<Product>(
+      "/products/create",
       productLike,
     );
 
     return data;
   } catch (error) {
     console.log(error);
+    return null;
   }
 };
 
 export const putUpdateProduct = async (
-  productLike: BodyCreateUpdateProduct,
-) => {
+  productId: string,
+  productLike: Partial<ProductLike>,
+): Promise<Product | null> => {
   try {
-    const { data } = await apiService.put("/products/update", productLike);
+    const { data } = await apiService.put<Product>(
+      `/products/${productId}`,
+      productLike,
+    );
 
     return data;
   } catch (error) {
     console.log(error);
+    return null;
   }
 };
