@@ -1,7 +1,7 @@
 import { ThemedText } from "@/components/themed-text";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { Ionicons } from "@expo/vector-icons";
-import React from "react";
+import React, { useState } from "react";
 import {
   Pressable,
   StyleSheet,
@@ -30,11 +30,16 @@ export default function ThemedTextInput({
   flex1Row,
   error,
   errorMessage,
+  secureTextEntry,
   ...props
 }: Props) {
   const backgroundColor = useThemeColor({}, "background");
   const textColor = useThemeColor({}, "text");
   const iconColor = useThemeColor({}, "icon");
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const isPasswordInput = !!secureTextEntry;
 
   return (
     <View
@@ -59,11 +64,21 @@ export default function ThemedTextInput({
         <TextInput
           style={{ color: textColor, flex: 1 }}
           placeholderTextColor={"gray"}
+          secureTextEntry={isPasswordInput ? !showPassword : false}
           {...props}
         />
-        {iconRightName && (
+        {iconRightName && !isPasswordInput && (
           <Pressable onPress={onIconRightPress}>
             <Ionicons name={iconRightName} color={iconColor} size={23} />
+          </Pressable>
+        )}
+        {isPasswordInput && (
+          <Pressable onPress={() => setShowPassword((prev) => !prev)}>
+            <Ionicons
+              name={showPassword ? "eye-outline" : "eye-off-outline"}
+              color={iconColor}
+              size={23}
+            />
           </Pressable>
         )}
       </View>
